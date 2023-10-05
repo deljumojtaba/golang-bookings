@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 	"time"
@@ -44,7 +43,7 @@ func main() {
 
 	render.NewTemplates(&app)
 
-	fmt.Println(fmt.Sprintf("Staring application on port %s", portNumber))
+	log.Println("Starting application on port", portNumber)
 
 	srv := &http.Server{
 		Addr:    portNumber,
