@@ -6,41 +6,45 @@ import (
 	"log"
 	"net/http"
 	"path/filepath"
+
+	"github.com/deljumojtaba/golang-bookings/pkg/config"
+	"github.com/deljumojtaba/golang-bookings/pkg/models"
 )
 
-func RenderTemplate(w http.ResponseWriter, tmpl string) {
-	// create a template cache
-	tc, err := createTemplateCache()
-	if err != nil {
-		log.Println(err.Error())
-		return
-	}
+var app *config.AppConfig
 
+// new template function that we can use in our templates
+func NewTemplate(a *config.AppConfig) {
+	app = a
+}
+
+func RenderTemplate(w http.ResponseWriter, tmpl string, td *models.TemplateData) {
+
+	var tc map[string]*template.Template
+	if app.UseCache {
+		// get the template cache from the app config
+		tc = app.TemplateCache
+	} else {
+		tc, _ = CreateTemplateCache()
+	}
 	// get the template cache
 	t, ok := tc[tmpl]
 	if !ok {
-		log.Println(err.Error())
-		return
+		log.Fatal("Could not get template from template cache")
 	}
 
 	buf := new(bytes.Buffer)
 
-	err = t.Execute(buf, nil)
-	if err != nil {
-		log.Println(err.Error())
-		return
-	}
+	_ = t.Execute(buf, td)
 
-	// parse the template cache
-	_, err = buf.WriteTo(w)
+	_, err := buf.WriteTo(w)
 	if err != nil {
-		log.Println(err.Error())
-		return
+		log.Fatal("Error writing template to browser:", err)
 	}
 
 }
 
-func createTemplateCache() (map[string]*template.Template, error) {
+func CreateTemplateCache() (map[string]*template.Template, error) {
 	myCache := map[string]*template.Template{}
 
 	pages, err := filepath.Glob("./templates/*.page.tmpl")
