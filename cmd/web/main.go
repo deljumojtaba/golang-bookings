@@ -7,9 +7,9 @@ import (
 	"time"
 
 	"github.com/alexedwards/scs/v2"
-	"github.com/deljumojtaba/golang-bookings/pkg/config"
-	"github.com/deljumojtaba/golang-bookings/pkg/handlers"
-	"github.com/deljumojtaba/golang-bookings/pkg/render"
+	"github.com/deljumojtaba/golang-bookings/internal/config"
+	"github.com/deljumojtaba/golang-bookings/internal/handlers"
+	"github.com/deljumojtaba/golang-bookings/internal/render"
 	"github.com/joho/godotenv"
 )
 
